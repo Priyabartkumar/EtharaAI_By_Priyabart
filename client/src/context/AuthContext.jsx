@@ -3,7 +3,7 @@ import api from '../lib/api';
 import toast from 'react-hot-toast';
 
 const AuthContext = createContext(null);
-const SESSION_TIMEOUT = 60 * 60 * 1000;
+const SESSION_TIMEOUT = 2 * 60 * 1000;
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
