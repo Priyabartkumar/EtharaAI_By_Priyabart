@@ -213,6 +213,7 @@ export default function ProjectBoard() {
         <AddMemberModal
           onClose={() => setShowAddMember(false)}
           onAdd={handleAddMember}
+          existingMembers={project.members}
         />
       )}
 
@@ -424,42 +425,69 @@ function CreateTaskModal({ status, members, onClose, onCreate }) {
   );
 }
 
-function AddMemberModal({ onClose, onAdd }) {
-  const [email, setEmail] = useState('');
+function AddMemberModal({ onClose, onAdd, existingMembers }) {
+  const [search, setSearch] = useState('');
+  const [allUsers, setAllUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [adding, setAdding] = useState(false);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  useEffect(() => {
     setLoading(true);
+    api.get('/auth/users')
+      .then(res => setAllUsers(res.data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  const existingIds = new Set(existingMembers.map(m => m.user.id));
+  const filtered = allUsers.filter(u =>
+    !existingIds.has(u.id) &&
+    (u.name.toLowerCase().includes(search.toLowerCase()) ||
+     u.email.toLowerCase().includes(search.toLowerCase()))
+  );
+
+  async function handleAdd(email) {
+    setAdding(true);
     await onAdd(email);
-    setLoading(false);
+    setAdding(false);
   }
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="card p-6 w-full max-w-sm">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Add Member</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email address</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="input-field"
-              placeholder="teammate@example.com"
-              required
-              autoFocus
-            />
-            <p className="text-xs text-gray-400 mt-1">They must have a TaskPilot account</p>
-          </div>
-          <div className="flex justify-end gap-3">
-            <button type="button" onClick={onClose} className="btn-secondary">Cancel</button>
-            <button type="submit" disabled={loading || !email} className="btn-primary">
-              {loading ? 'Adding...' : 'Add'}
-            </button>
-          </div>
-        </form>
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="input-field mb-3"
+          placeholder="Search by name or email..."
+          autoFocus
+        />
+        <div className="max-h-60 overflow-y-auto space-y-1">
+          {loading && <p className="text-sm text-gray-400 text-center py-4">Loading users...</p>}
+          {!loading && filtered.length === 0 && (
+            <p className="text-sm text-gray-400 text-center py-4">No users found</p>
+          )}
+          {filtered.map(user => (
+            <div key={user.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate">{user.name}</p>
+                <p className="text-xs text-gray-500 truncate">{user.email}</p>
+              </div>
+              <button
+                onClick={() => handleAdd(user.email)}
+                disabled={adding}
+                className="btn-primary text-xs px-3 py-1 shrink-0 ml-2"
+              >
+                Add
+              </button>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-end mt-4">
+          <button onClick={onClose} className="btn-secondary">Close</button>
+        </div>
       </div>
     </div>
   );

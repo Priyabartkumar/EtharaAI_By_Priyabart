@@ -9,5 +9,6 @@ router.post('/refresh', authController.refresh);
 router.get('/me', authenticate, authController.getMe);
 router.post('/transfer-admin', authenticate, authController.transferAdmin);
 router.post('/host-admin', authenticate, authController.hostAdmin);
+router.get('/users', authenticate, authController.getAllUsers);
 
 module.exports = router;

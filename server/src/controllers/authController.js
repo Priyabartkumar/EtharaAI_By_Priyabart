@@ -268,4 +268,16 @@ async function hostAdmin(req, res, next) {
   }
 }
 
-module.exports = { signup, login, refresh, getMe, transferAdmin, hostAdmin };
+async function getAllUsers(req, res, next) {
+  try {
+    const users = await prisma.user.findMany({
+      select: { id: true, name: true, email: true, avatar: true },
+      orderBy: { name: 'asc' }
+    });
+    res.json(users);
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { signup, login, refresh, getMe, transferAdmin, hostAdmin, getAllUsers };
