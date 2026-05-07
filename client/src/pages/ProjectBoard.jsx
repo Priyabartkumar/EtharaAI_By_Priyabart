@@ -334,6 +334,11 @@ function CreateTaskModal({ status, members, onClose, onCreate }) {
   const [dueDate, setDueDate] = useState('');
   const [assigneeId, setAssigneeId] = useState('');
   const [loading, setLoading] = useState(false);
+  const [allUsers, setAllUsers] = useState([]);
+
+  useEffect(() => {
+    api.get('/auth/users').then(res => setAllUsers(res.data)).catch(() => {});
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -408,8 +413,10 @@ function CreateTaskModal({ status, members, onClose, onCreate }) {
               className="input-field"
             >
               <option value="">Unassigned</option>
-              {members.map(m => (
-                <option key={m.user.id} value={m.user.id}>{m.user.name}</option>
+              {allUsers.map(u => (
+                <option key={u.id} value={u.id}>
+                  {u.name}{u.role === 'ADMIN' ? ' (Admin)' : ''}
+                </option>
               ))}
             </select>
           </div>
@@ -501,6 +508,11 @@ function EditTaskModal({ task, members, isAdmin, onClose, onUpdate }) {
   const [dueDate, setDueDate] = useState(task.dueDate ? task.dueDate.split('T')[0] : '');
   const [assigneeId, setAssigneeId] = useState(task.assigneeId || '');
   const [loading, setLoading] = useState(false);
+  const [allUsers, setAllUsers] = useState([]);
+
+  useEffect(() => {
+    api.get('/auth/users').then(res => setAllUsers(res.data)).catch(() => {});
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -596,8 +608,10 @@ function EditTaskModal({ task, members, isAdmin, onClose, onUpdate }) {
               disabled={!isAdmin}
             >
               <option value="">Unassigned</option>
-              {members.map(m => (
-                <option key={m.user.id} value={m.user.id}>{m.user.name} ({m.role.toLowerCase()})</option>
+              {allUsers.map(u => (
+                <option key={u.id} value={u.id}>
+                  {u.name}{u.role === 'ADMIN' ? ' (Admin)' : ''}
+                </option>
               ))}
             </select>
             {!isAdmin && (

@@ -273,7 +273,7 @@ async function hostAdmin(req, res, next) {
 async function getAllUsers(req, res, next) {
   try {
     const users = await prisma.user.findMany({
-      select: { id: true, name: true, email: true, avatar: true },
+      select: { id: true, name: true, email: true, avatar: true, role: true },
       orderBy: { name: 'asc' }
     });
     res.json(users);
