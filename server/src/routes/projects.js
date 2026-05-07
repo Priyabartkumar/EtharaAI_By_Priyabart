@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const projectController = require('../controllers/projectController');
-const { authenticate, requireRole } = require('../middleware/auth');
+const { authenticate, requireRole, requireGlobalAdmin } = require('../middleware/auth');
 
 router.use(authenticate);
 
 router.get('/', projectController.listProjects);
-router.post('/', projectController.createProject);
+router.post('/', requireGlobalAdmin, projectController.createProject);
 router.get('/:projectId', requireRole(), projectController.getProject);
 router.put('/:projectId', requireRole('ADMIN'), projectController.updateProject);
 router.delete('/:projectId', requireRole('ADMIN'), projectController.deleteProject);

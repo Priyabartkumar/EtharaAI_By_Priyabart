@@ -12,7 +12,7 @@ async function authenticate(req, res, next) {
     const payload = verifyAccessToken(token);
     const user = await prisma.user.findUnique({
       where: { id: payload.userId },
-      select: { id: true, name: true, email: true, avatar: true }
+      select: { id: true, name: true, email: true, avatar: true, role: true }
     });
 
     if (!user) {
@@ -58,4 +58,11 @@ function requireRole(...roles) {
   };
 }
 
-module.exports = { authenticate, requireRole };
+function requireGlobalAdmin(req, res, next) {
+  if (req.user.role !== 'ADMIN') {
+    return res.status(403).json({ error: 'Only admins can perform this action' });
+  }
+  next();
+}
+
+module.exports = { authenticate, requireRole, requireGlobalAdmin };

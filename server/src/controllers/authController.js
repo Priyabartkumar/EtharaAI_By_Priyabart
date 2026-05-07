@@ -12,14 +12,18 @@ async function signup(req, res, next) {
       return res.status(409).json({ error: 'Email already registered' });
     }
 
+    const userCount = await prisma.user.count();
+    const role = userCount === 0 ? 'ADMIN' : 'MEMBER';
+
     const hashedPassword = await bcrypt.hash(data.password, 12);
     const user = await prisma.user.create({
       data: {
         name: data.name,
         email: data.email,
-        password: hashedPassword
+        password: hashedPassword,
+        role
       },
-      select: { id: true, name: true, email: true }
+      select: { id: true, name: true, email: true, role: true }
     });
 
     const accessToken = generateAccessToken(user.id);
@@ -52,7 +56,7 @@ async function login(req, res, next) {
     const refreshToken = generateRefreshToken(user.id);
 
     res.json({
-      user: { id: user.id, name: user.name, email: user.email },
+      user: { id: user.id, name: user.name, email: user.email, role: user.role },
       accessToken,
       refreshToken
     });
@@ -93,12 +97,9 @@ async function getMe(req, res, next) {
       select: { role: true, projectId: true }
     });
 
-    const isAdmin = memberships.some(m => m.role === 'ADMIN');
-
     res.json({
       user: {
         ...req.user,
-        role: isAdmin ? 'ADMIN' : 'MEMBER',
         memberships
       }
     });
@@ -123,22 +124,23 @@ async function transferAdmin(req, res, next) {
       return res.status(400).json({ error: 'You are already the admin' });
     }
 
+    if (req.user.role !== 'ADMIN') {
+      return res.status(403).json({ error: 'Only the admin can transfer the role' });
+    }
+
+    await prisma.user.update({ where: { id: req.user.id }, data: { role: 'MEMBER' } });
+    await prisma.user.update({ where: { id: targetUser.id }, data: { role: 'ADMIN' } });
+
     const adminMemberships = await prisma.projectMember.findMany({
       where: { userId: req.user.id, role: 'ADMIN' }
     });
 
-    if (adminMemberships.length === 0) {
-      return res.status(403).json({ error: 'You are not an admin of any project' });
-    }
-
     for (const membership of adminMemberships) {
-      // Demote current admin to MEMBER
       await prisma.projectMember.update({
         where: { id: membership.id },
         data: { role: 'MEMBER' }
       });
 
-      // Check if target user is already a member of this project
       const existingMembership = await prisma.projectMember.findUnique({
         where: {
           userId_projectId: {

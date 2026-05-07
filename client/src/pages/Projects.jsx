@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Users, CheckSquare } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import api from '../lib/api';
 import toast from 'react-hot-toast';
 
 export default function Projects() {
+  const { user } = useAuth();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
+  const isGlobalAdmin = user?.role === 'ADMIN';
 
   useEffect(() => {
     fetchProjects();
@@ -49,10 +52,12 @@ export default function Projects() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-900">Projects</h1>
-        <button onClick={() => setShowCreate(true)} className="btn-primary flex items-center gap-2">
-          <Plus size={16} />
-          New Project
-        </button>
+        {isGlobalAdmin && (
+          <button onClick={() => setShowCreate(true)} className="btn-primary flex items-center gap-2">
+            <Plus size={16} />
+            New Project
+          </button>
+        )}
       </div>
 
       {showCreate && (
@@ -66,7 +71,9 @@ export default function Projects() {
         <div className="card p-12 text-center">
           <FolderIcon className="mx-auto mb-4" />
           <h3 className="font-semibold text-gray-900">No projects yet</h3>
-          <p className="text-sm text-gray-500 mt-1">Create your first project to get started</p>
+          <p className="text-sm text-gray-500 mt-1">
+            {isGlobalAdmin ? 'Create your first project to get started' : 'Wait for an admin to add you to a project'}
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
