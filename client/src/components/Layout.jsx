@@ -219,6 +219,7 @@ export default function Layout() {
             </div>
             <div className="flex-1 min-w-0 text-left">
               <p className="text-sm font-medium text-gray-900 truncate">{user?.name}</p>
+              <p className="text-xs text-gray-400 truncate">{user?.email}</p>
               <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
                 isAdmin
                   ? 'bg-brand-100 text-brand-700'
