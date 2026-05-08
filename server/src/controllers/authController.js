@@ -264,6 +264,10 @@ async function hostAdmin(req, res, next) {
       return res.status(400).json({ error: 'All projects already have 3 admins' });
     }
 
+    if (results.some(r => r.success)) {
+      await prisma.user.update({ where: { id: targetUser.id }, data: { role: 'ADMIN' } });
+    }
+
     res.json({ message: `${targetUser.name} has been promoted to admin`, results });
   } catch (err) {
     next(err);
