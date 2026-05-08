@@ -32,7 +32,7 @@ export default function Signup() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-gray-50 dark:bg-gray-950">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <div className="w-12 h-12 bg-brand-600 rounded-xl flex items-center justify-center mx-auto mb-4">
@@ -40,13 +40,13 @@ export default function Signup() {
               <path d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Create an account</h1>
-          <p className="text-gray-500 mt-1">Get started with TaskPilot</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Create an account</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">Get started with TaskPilot</p>
         </div>
 
         <form onSubmit={handleSubmit} className="card p-6 space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Full name</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full name</label>
             <input
               type="text"
               value={name}
@@ -57,7 +57,7 @@ export default function Signup() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
             <input
               type="email"
               value={email}
@@ -68,7 +68,7 @@ export default function Signup() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -94,7 +94,7 @@ export default function Signup() {
 
         <p className="text-center text-sm text-gray-500 mt-4">
           Already have an account?{' '}
-          <Link to="/login" className="text-brand-600 font-medium hover:text-brand-700">
+          <Link to="/login" className="text-brand-600 font-medium hover:text-brand-700 dark:text-brand-400">
             Sign in
           </Link>
         </p>

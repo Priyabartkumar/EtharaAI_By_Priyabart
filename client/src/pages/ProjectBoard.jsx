@@ -124,11 +124,11 @@ export default function ProjectBoard() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate('/projects')} className="p-1 hover:bg-gray-100 rounded">
+          <button onClick={() => navigate('/projects')} className="p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded dark:text-gray-300">
             <ArrowLeft size={20} />
           </button>
           <div className="w-3 h-3 rounded-full" style={{ backgroundColor: project.color }} />
-          <h1 className="text-2xl font-bold text-gray-900">{project.name}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{project.name}</h1>
         </div>
         <div className="flex items-center gap-2">
           {/* Member avatars */}
@@ -157,19 +157,19 @@ export default function ProjectBoard() {
         {COLUMNS.map(column => {
           const columnTasks = project.tasks.filter(t => t.status === column.id);
           return (
-            <div key={column.id} className="bg-gray-50 rounded-xl p-3">
+            <div key={column.id} className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-3">
               <div className="flex items-center justify-between mb-3 px-1">
                 <div className="flex items-center gap-2">
                   <div className={`w-2.5 h-2.5 rounded-full ${column.color}`} />
-                  <h3 className="font-medium text-sm text-gray-700">{column.label}</h3>
-                  <span className="text-xs text-gray-400 bg-gray-200 px-1.5 py-0.5 rounded-full">
+                  <h3 className="font-medium text-sm text-gray-700 dark:text-gray-300">{column.label}</h3>
+                  <span className="text-xs text-gray-400 bg-gray-200 dark:bg-gray-700 px-1.5 py-0.5 rounded-full">
                     {columnTasks.length}
                   </span>
                 </div>
                 {isAdmin && (
                   <button
                     onClick={() => setShowCreateTask(column.id)}
-                    className="p-1 hover:bg-gray-200 rounded text-gray-400 hover:text-gray-600"
+                    className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-gray-400 hover:text-gray-600"
                   >
                     <Plus size={16} />
                   </button>
@@ -242,7 +242,7 @@ function TaskCard({ task, isAdmin, currentUserId, columns, onStatusChange, onDel
       onClick={() => isAdmin && onEdit(task)}
     >
       <div className="flex items-start justify-between gap-2">
-        <h4 className="text-sm font-medium text-gray-900 flex-1">{task.title}</h4>
+        <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100 flex-1">{task.title}</h4>
         {(isAdmin || isAssignedToMe) && (
           <div className="relative" onClick={(e) => e.stopPropagation()}>
             <button
@@ -252,7 +252,7 @@ function TaskCard({ task, isAdmin, currentUserId, columns, onStatusChange, onDel
               <MoreHorizontal size={14} className="text-gray-400" />
             </button>
             {showMenu && (
-              <div className="absolute right-0 top-6 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-10 w-40">
+              <div className="absolute right-0 top-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg py-1 z-10 w-40">
                 {isAdmin && (
                   <>
                     <button
@@ -357,10 +357,10 @@ function CreateTaskModal({ status, members, onClose, onCreate }) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="card p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Create Task</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Create Task</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title</label>
             <input
               type="text"
               value={title}
@@ -372,7 +372,7 @@ function CreateTaskModal({ status, members, onClose, onCreate }) {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -383,7 +383,7 @@ function CreateTaskModal({ status, members, onClose, onCreate }) {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Priority</label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
@@ -396,7 +396,7 @@ function CreateTaskModal({ status, members, onClose, onCreate }) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Due Date</label>
               <input
                 type="date"
                 value={dueDate}
@@ -406,7 +406,7 @@ function CreateTaskModal({ status, members, onClose, onCreate }) {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Assign to</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Assign to</label>
             <select
               value={assigneeId}
               onChange={(e) => setAssigneeId(e.target.value)}
@@ -462,7 +462,7 @@ function AddMemberModal({ onClose, onAdd, existingMembers }) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="card p-6 w-full max-w-sm">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Add Member</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Add Member</h2>
         <input
           type="text"
           value={search}
@@ -477,9 +477,9 @@ function AddMemberModal({ onClose, onAdd, existingMembers }) {
             <p className="text-sm text-gray-400 text-center py-4">No users found</p>
           )}
           {filtered.map(user => (
-            <div key={user.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
+            <div key={user.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
               <div className="min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">{user.name}</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{user.name}</p>
                 <p className="text-xs text-gray-500 truncate">{user.email}</p>
               </div>
               <button
@@ -532,7 +532,7 @@ function EditTaskModal({ task, members, isAdmin, onClose, onUpdate }) {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="card p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">Edit Task</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Edit Task</h2>
           <button onClick={onClose} className="p-1 hover:bg-gray-100 rounded">
             <X size={18} className="text-gray-400" />
           </button>
@@ -540,7 +540,7 @@ function EditTaskModal({ task, members, isAdmin, onClose, onUpdate }) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title</label>
             <input
               type="text"
               value={title}
@@ -551,7 +551,7 @@ function EditTaskModal({ task, members, isAdmin, onClose, onUpdate }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -563,7 +563,7 @@ function EditTaskModal({ task, members, isAdmin, onClose, onUpdate }) {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
@@ -575,7 +575,7 @@ function EditTaskModal({ task, members, isAdmin, onClose, onUpdate }) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Priority</label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
@@ -590,7 +590,7 @@ function EditTaskModal({ task, members, isAdmin, onClose, onUpdate }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Due Date</label>
             <input
               type="date"
               value={dueDate}
@@ -600,7 +600,7 @@ function EditTaskModal({ task, members, isAdmin, onClose, onUpdate }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Assign to</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Assign to</label>
             <select
               value={assigneeId}
               onChange={(e) => setAssigneeId(e.target.value)}
@@ -683,11 +683,11 @@ function DiscussionSection({ projectId, currentUser }) {
     <div className="card">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors rounded-xl"
+        className="w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors rounded-xl"
       >
         <div className="flex items-center gap-2">
           <MessageSquare size={18} className="text-brand-600" />
-          <h3 className="font-semibold text-gray-900">Discussion</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white">Discussion</h3>
           {comments.length > 0 && (
             <span className="text-xs bg-brand-100 text-brand-700 px-1.5 py-0.5 rounded-full">{comments.length}</span>
           )}
@@ -696,7 +696,7 @@ function DiscussionSection({ projectId, currentUser }) {
       </button>
 
       {isOpen && (
-        <div className="border-t border-gray-100">
+        <div className="border-t border-gray-100 dark:border-gray-700">
           {/* Comments list */}
           <div className="max-h-80 overflow-y-auto p-4 space-y-4">
             {loading ? (

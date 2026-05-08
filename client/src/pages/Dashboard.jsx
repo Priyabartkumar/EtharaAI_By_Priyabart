@@ -26,7 +26,7 @@ export default function Dashboard() {
       <div className="animate-pulse space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="card p-5 h-24 bg-gray-100" />
+            <div key={i} className="card p-5 h-24 bg-gray-100 dark:bg-gray-800" />
           ))}
         </div>
       </div>
@@ -46,56 +46,24 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
 
       {/* Stats cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          icon={CheckSquare}
-          label="Total Tasks"
-          value={stats?.totalTasks || 0}
-          color="text-brand-600"
-          bg="bg-brand-50"
-        />
-        <StatCard
-          icon={Clock}
-          label="In Progress"
-          value={stats?.byStatus?.inProgress || 0}
-          color="text-blue-600"
-          bg="bg-blue-50"
-        />
-        <StatCard
-          icon={AlertTriangle}
-          label="Overdue"
-          value={stats?.overdueTasks || 0}
-          color="text-red-600"
-          bg="bg-red-50"
-        />
-        <StatCard
-          icon={FolderKanban}
-          label="Projects"
-          value={stats?.totalProjects || 0}
-          color="text-emerald-600"
-          bg="bg-emerald-50"
-        />
+        <StatCard icon={CheckSquare} label="Total Tasks" value={stats?.totalTasks || 0} color="text-brand-600" bg="bg-brand-50 dark:bg-brand-900/30" />
+        <StatCard icon={Clock} label="In Progress" value={stats?.byStatus?.inProgress || 0} color="text-blue-600" bg="bg-blue-50 dark:bg-blue-900/30" />
+        <StatCard icon={AlertTriangle} label="Overdue" value={stats?.overdueTasks || 0} color="text-red-600" bg="bg-red-50 dark:bg-red-900/30" />
+        <StatCard icon={FolderKanban} label="Projects" value={stats?.totalProjects || 0} color="text-emerald-600" bg="bg-emerald-50 dark:bg-emerald-900/30" />
       </div>
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {pieData.length > 0 && (
           <div className="card p-5">
-            <h3 className="font-semibold text-gray-900 mb-4">Tasks by Status</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Tasks by Status</h3>
             <ResponsiveContainer width="100%" height={220}>
               <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={50}
-                  outerRadius={80}
-                  dataKey="value"
-                  label={({ name, value }) => `${name}: ${value}`}
-                >
+                <Pie data={pieData} cx="50%" cy="50%" innerRadius={50} outerRadius={80} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
                   {pieData.map((_, idx) => (
                     <Cell key={idx} fill={STATUS_COLORS[idx % STATUS_COLORS.length]} />
                   ))}
@@ -108,13 +76,13 @@ export default function Dashboard() {
 
         {barData.length > 0 && (
           <div className="card p-5">
-            <h3 className="font-semibold text-gray-900 mb-4">Tasks per Member</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Tasks per Member</h3>
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={barData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                <YAxis allowDecimals={false} tick={{ fontSize: 12 }} />
-                <Tooltip />
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#9ca3af' }} />
+                <YAxis allowDecimals={false} tick={{ fontSize: 12, fill: '#9ca3af' }} />
+                <Tooltip contentStyle={{ backgroundColor: '#1f2937', border: 'none', borderRadius: '8px', color: '#f3f4f6' }} />
                 <Bar dataKey="tasks" fill="#6366f1" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -125,18 +93,18 @@ export default function Dashboard() {
       {/* Upcoming deadlines */}
       {overview?.upcomingDeadlines?.length > 0 && (
         <div className="card p-5">
-          <h3 className="font-semibold text-gray-900 mb-4">Upcoming Deadlines</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Upcoming Deadlines</h3>
           <div className="space-y-3">
             {overview.upcomingDeadlines.slice(0, 5).map(task => (
-              <div key={task.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+              <div key={task.id} className="flex items-center justify-between py-2 border-b border-gray-50 dark:border-gray-700 last:border-0">
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: task.project?.color || '#6366f1' }} />
                   <div>
-                    <p className="text-sm font-medium text-gray-900">{task.title}</p>
-                    <p className="text-xs text-gray-500">{task.project?.name}</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{task.title}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{task.project?.name}</p>
                   </div>
                 </div>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-gray-500 dark:text-gray-400">
                   {new Date(task.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                 </span>
               </div>
@@ -148,15 +116,15 @@ export default function Dashboard() {
       {/* Recent activity */}
       {overview?.recentActivity?.length > 0 && (
         <div className="card p-5">
-          <h3 className="font-semibold text-gray-900 mb-4">Recent Activity</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Recent Activity</h3>
           <div className="space-y-3">
             {overview.recentActivity.slice(0, 8).map(activity => (
               <div key={activity.id} className="flex items-start gap-3 py-2">
-                <div className="w-7 h-7 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center text-xs font-semibold flex-shrink-0">
+                <div className="w-7 h-7 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 flex items-center justify-center text-xs font-semibold flex-shrink-0">
                   {activity.user?.name?.charAt(0)}
                 </div>
                 <div>
-                  <p className="text-sm text-gray-700">
+                  <p className="text-sm text-gray-700 dark:text-gray-300">
                     <span className="font-medium">{activity.user?.name}</span>{' '}
                     {activity.details}
                   </p>
@@ -180,8 +148,8 @@ function StatCard({ icon: Icon, label, value, color, bg }) {
         <Icon size={20} />
       </div>
       <div>
-        <p className="text-2xl font-bold text-gray-900">{value}</p>
-        <p className="text-sm text-gray-500">{label}</p>
+        <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
       </div>
     </div>
   );

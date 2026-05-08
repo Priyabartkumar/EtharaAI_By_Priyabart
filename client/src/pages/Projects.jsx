@@ -51,7 +51,7 @@ export default function Projects() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Projects</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Projects</h1>
         {isGlobalAdmin && (
           <button onClick={() => setShowCreate(true)} className="btn-primary flex items-center gap-2">
             <Plus size={16} />
@@ -70,7 +70,7 @@ export default function Projects() {
       {projects.length === 0 ? (
         <div className="card p-12 text-center">
           <FolderIcon className="mx-auto mb-4" />
-          <h3 className="font-semibold text-gray-900">No projects yet</h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white">No projects yet</h3>
           <p className="text-sm text-gray-500 mt-1">
             {isGlobalAdmin ? 'Create your first project to get started' : 'Wait for an admin to add you to a project'}
           </p>
@@ -81,7 +81,7 @@ export default function Projects() {
             <Link
               key={project.id}
               to={`/projects/${project.id}`}
-              className="card p-5 hover:shadow-md transition-shadow group"
+              className="card p-5 hover:shadow-md transition-shadow group dark:hover:border-gray-600"
             >
               <div className="flex items-start gap-3">
                 <div
@@ -89,7 +89,7 @@ export default function Projects() {
                   style={{ backgroundColor: project.color }}
                 />
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 group-hover:text-brand-600 transition-colors truncate">
+                  <h3 className="font-semibold text-gray-900 dark:text-white group-hover:text-brand-600 transition-colors truncate">
                     {project.name}
                   </h3>
                   {project.description && (

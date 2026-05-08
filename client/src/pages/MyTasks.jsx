@@ -44,7 +44,7 @@ export default function MyTasks() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">My Tasks</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">My Tasks</h1>
 
       {overdue.length > 0 && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3">
@@ -56,7 +56,7 @@ export default function MyTasks() {
       )}
 
       {/* Filter tabs */}
-      <div className="flex gap-1 bg-gray-100 p-1 rounded-lg w-fit">
+      <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg w-fit">
         {[
           { key: 'all', label: 'All' },
           { key: 'TODO', label: 'To Do' },
@@ -67,7 +67,7 @@ export default function MyTasks() {
             key={tab.key}
             onClick={() => setFilter(tab.key)}
             className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-              filter === tab.key ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+              filter === tab.key ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'
             }`}
           >
             {tab.label}
@@ -93,7 +93,7 @@ export default function MyTasks() {
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: task.project?.color || '#6366f1' }} />
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{task.title}</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{task.title}</p>
                     <p className="text-xs text-gray-400">{task.project?.name}</p>
                   </div>
                 </div>
