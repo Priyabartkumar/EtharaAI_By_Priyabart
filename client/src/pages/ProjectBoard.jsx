@@ -136,8 +136,8 @@ export default function ProjectBoard() {
             {project.members.slice(0, 5).map(m => (
               <div
                 key={m.id}
-                className="w-8 h-8 rounded-full bg-brand-100 text-brand-700 border-2 border-white flex items-center justify-center text-xs font-semibold"
-                title={m.user.name}
+                className={`w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-xs font-semibold ${m.role === 'ADMIN' ? 'bg-amber-100 text-amber-700 ring-2 ring-amber-400' : 'bg-brand-100 text-brand-700'}`}
+                title={`${m.user.name}${m.role === 'ADMIN' ? ' (Admin)' : ''}`}
               >
                 {m.user.name.charAt(0)}
               </div>
