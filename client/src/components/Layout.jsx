@@ -12,7 +12,7 @@ const navItems = [
 ];
 
 export default function Layout() {
-  const { user, logout } = useAuth();
+  const { user, logout, refreshUser } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -25,7 +25,10 @@ export default function Layout() {
 
   useEffect(() => {
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 15000);
+    const interval = setInterval(() => {
+      fetchNotifications();
+      refreshUser();
+    }, 15000);
     return () => clearInterval(interval);
   }, []);
 
